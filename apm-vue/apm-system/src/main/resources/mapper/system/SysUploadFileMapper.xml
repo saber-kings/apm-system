@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.saberking.jvav.apm.system.mapper.SysUploadFileMapper">
+
+    <resultMap type="SysUploadFile" id="SysUploadFileResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="name" column="name"/>
+        <result property="realName" column="real_name"/>
+        <result property="url" column="url"/>
+        <result property="realUrl" column="real_url"/>
+        <result property="suffix" column="suffix"/>
+        <result property="path" column="path"/>
+        <result property="type" column="type"/>
+        <result property="size" column="size"/>
+        <result property="operate" column="operate"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSysUploadFileVo">
+        select id,
+               title,
+               name,
+               real_name,
+               url,
+               real_url,
+               suffix,
+               path,
+               type,
+               size,
+               operate,
+               create_time,
+               remark
+        from sys_upload_file
+    </sql>
+
+    <select id="selectSysUploadFileList" parameterType="SysUploadFile" resultMap="SysUploadFileResult">
+        <include refid="selectSysUploadFileVo"/>
+        <where>
+            <if test="title != null  and title != ''">and title like concat('%', #{title}, '%')</if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="type != null ">and type = #{type}</if>
+            <if test="params.beginSize != null and params.beginSize != '' and params.endSize != null and params.endSize != ''">
+                and size between #{params.beginSize} and #{params.endSize}
+            </if>
+            <if test="operate != null  and operate != ''">and operate like concat('%', #{operate}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and create_time between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSysUploadFileById" parameterType="Long" resultMap="SysUploadFileResult">
+        <include refid="selectSysUploadFileVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysUploadFile" parameterType="SysUploadFile" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_upload_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="name != null">name,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="url != null">url,</if>
+            <if test="realUrl != null">real_url,</if>
+            <if test="suffix != null">suffix,</if>
+            <if test="path != null">path,</if>
+            <if test="type != null">type,</if>
+            <if test="size != null">size,</if>
+            <if test="operate != null">operate,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="name != null">#{name},</if>
+            <if test="realName != null">#{realName},</if>
+            <if test="url != null">#{url},</if>
+            <if test="realUrl != null">#{realUrl},</if>
+            <if test="suffix != null">#{suffix},</if>
+            <if test="path != null">#{path},</if>
+            <if test="type != null">#{type},</if>
+            <if test="size != null">#{size},</if>
+            <if test="operate != null">#{operate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysUploadFile" parameterType="SysUploadFile">
+        update sys_upload_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="realUrl != null">real_url = #{realUrl},</if>
+            <if test="suffix != null">suffix = #{suffix},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="size != null">size = #{size},</if>
+            <if test="operate != null">operate = #{operate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysUploadFileById" parameterType="Long">
+        delete
+        from sys_upload_file
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteSysUploadFileByIds" parameterType="String">
+        delete from sys_upload_file where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.saberking.jvav.apm.web.mapper.ApmStoreProductAttrResultMapper">
+
+    <resultMap type="ApmStoreProductAttrResult" id="ApmStoreProductAttrResultResult">
+        <result property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="result" column="result"/>
+        <result property="changeTime" column="change_time"/>
+    </resultMap>
+
+    <sql id="selectApmStoreProductAttrResultVo">
+        select id, product_id, result, change_time
+        from apm_store_product_attr_result
+    </sql>
+
+    <select id="selectApmStoreProductAttrResultList" parameterType="ApmStoreProductAttrResult"
+            resultMap="ApmStoreProductAttrResultResult">
+        <include refid="selectApmStoreProductAttrResultVo"/>
+        <where>
+            <if test="productId != null ">and product_id = #{productId}</if>
+            <if test="params.beginChangeTime != null and params.beginChangeTime != '' and params.endChangeTime != null and params.endChangeTime != ''">
+                and change_time between #{params.beginChangeTime} and #{params.endChangeTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByProductId" parameterType="ApmStoreProductAttrResult"
+            resultMap="ApmStoreProductAttrResultResult">
+        <include refid="selectApmStoreProductAttrResultVo"/>
+        where product_id = #{productId}
+    </select>
+
+    <select id="selectApmStoreProductAttrResultById" parameterType="Integer"
+            resultMap="ApmStoreProductAttrResultResult">
+        <include refid="selectApmStoreProductAttrResultVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertApmStoreProductAttrResult" parameterType="ApmStoreProductAttrResult" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into apm_store_product_attr_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="result != null">result,</if>
+            <if test="changeTime != null">change_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="result != null">#{result},</if>
+            <if test="changeTime != null">#{changeTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateApmStoreProductAttrResult" parameterType="ApmStoreProductAttrResult">
+        update apm_store_product_attr_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="changeTime != null">change_time = #{changeTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteApmStoreProductAttrResultById" parameterType="Integer">
+        delete
+        from apm_store_product_attr_result
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteApmStoreProductAttrResultByIds" parameterType="String">
+        delete from apm_store_product_attr_result where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

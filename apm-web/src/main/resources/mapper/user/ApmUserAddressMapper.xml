@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.saberking.jvav.apm.web.mapper.ApmUserAddressMapper">
+    
+    <resultMap type="ApmUserAddress" id="ApmUserAddressResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="realName"    column="real_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="detail"    column="detail"    />
+        <result property="postCode"    column="post_code"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="isDel"    column="is_del"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectApmUserAddressVo">
+        select id, user_id, real_name, phone, province, city, district, detail, post_code, longitude, latitude, is_default, is_del, create_time from apm_user_address
+    </sql>
+
+    <select id="selectApmUserAddressList" parameterType="ApmUserAddress" resultMap="ApmUserAddressResult">
+        <include refid="selectApmUserAddressVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="realName != null  and realName != ''"> and real_name like concat('%', #{realName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="detail != null  and detail != ''"> and detail = #{detail}</if>
+            <if test="postCode != null  and postCode != ''"> and post_code = #{postCode}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+            <if test="isDefault != null "> and is_default = #{isDefault}</if>
+            <if test="isDel != null "> and is_del = #{isDel}</if>
+        </where>
+    </select>
+    
+    <select id="selectApmUserAddressById" parameterType="Integer" resultMap="ApmUserAddressResult">
+        <include refid="selectApmUserAddressVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertApmUserAddress" parameterType="ApmUserAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into apm_user_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="realName != null and realName != ''">real_name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="district != null and district != ''">district,</if>
+            <if test="detail != null and detail != ''">detail,</if>
+            <if test="postCode != null and postCode != ''">post_code,</if>
+            <if test="longitude != null and longitude != ''">longitude,</if>
+            <if test="latitude != null and latitude != ''">latitude,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="realName != null and realName != ''">#{realName},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="detail != null and detail != ''">#{detail},</if>
+            <if test="postCode != null and postCode != ''">#{postCode},</if>
+            <if test="longitude != null and longitude != ''">#{longitude},</if>
+            <if test="latitude != null and latitude != ''">#{latitude},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="isDel != null">#{isDel},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateApmUserAddress" parameterType="ApmUserAddress">
+        update apm_user_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="realName != null and realName != ''">real_name = #{realName},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="detail != null and detail != ''">detail = #{detail},</if>
+            <if test="postCode != null and postCode != ''">post_code = #{postCode},</if>
+            <if test="longitude != null and longitude != ''">longitude = #{longitude},</if>
+            <if test="latitude != null and latitude != ''">latitude = #{latitude},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteApmUserAddressById" parameterType="Integer">
+        delete from apm_user_address where id = #{id}
+    </delete>
+
+    <delete id="deleteApmUserAddressByIds">
+        delete from apm_user_address where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="deletedApmUserAddressByIds">
+        update apm_user_address set is_del = 1  where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>
